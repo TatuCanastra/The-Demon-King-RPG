@@ -1,0 +1,124 @@
+import random
+hp, nhp, souls, mp, m_potion, h_potion = 600, 2000, 0, 400, 10, 10
+
+
+def battle():
+    global hp, nhp, souls, mp, m_potion, h_potion
+    decision = ''
+    if nhp < 0:
+        souls += 10
+        print("Well, actually, you weren't supposed to win. Let's try again, alright?")
+        input()
+        if decision == 1:
+            battle()
+    elif hp < 0:
+        print('The player was defeated... \n1- Try again \n2- Exit')
+        decision = input()
+        if decision == 1:
+            battle()
+        elif decision == 2:
+            exit()
+        exit()
+    while decision == '':
+        print('HP: ', hp, '             The Demon King', nhp, '\nMP: ', mp, '\n1- Attack \n2- Spell \n3- Item')
+        decision = str(input())
+        if decision == '1':
+            damage = random.randint(1, 100)
+            nhp -= damage
+            print('Player caused ', damage, ' of damage')
+            input()
+            nemesis()
+        elif decision == '2':
+            spell_room()
+        elif decision == '3':
+            item_room()
+
+
+def spell_room():
+    global mp, nhp, hp
+    decision = ''
+    while decision == '':
+        print('1- Fireball \n2- Heal \n3- Cancel')
+        decision = str(input())
+        if decision == '1':
+            if mp < 200:
+                print('Not enough MP')
+                input()
+                spell_room()
+            elif mp >= 200:
+                mp -= 200
+                nhp -= 300
+                print('Player casted fireball')
+                input()
+                nemesis()
+        elif decision == '2':
+            if mp < 200:
+                print('Not enough MP')
+                input()
+                spell_room()
+            elif mp >= 200:
+                mp -= 200
+                hp += 200
+                print("Player used 'heal'")
+                input()
+                nemesis()
+        elif decision == '3':
+            battle()
+
+
+def item_room():
+    global h_potion, m_potion, hp, mp
+    decision = ''
+    while decision == '':
+        print('1- Helth potion: ', h_potion, '\n2- Mana potion: ', m_potion, '\n3- Cancel')
+        decision = str(input())
+        if decision == '1':
+            if h_potion >= 1:
+                h_potion -= 1
+                hp += 200
+                input()
+                nemesis()
+            elif h_potion <= 0:
+                print("You dont have this item")
+                input()
+                item_room()
+        elif decision == '2':
+            if m_potion >= 1:
+                m_potion -= 1
+                mp += 200
+                input()
+                nemesis()
+            elif m_potion <= 0:
+                print("You dont have this item")
+                input()
+                item_room()
+        elif decision == '3':
+            battle()
+
+
+def nemesis():
+    print('The Demon King is choosing his actions...')
+    global hp, nhp
+    decision = random.randint(0, 1)
+    input("Press 'enter'")
+    if decision == 0:
+        damage = random.randint(50, 200)
+        print('The Demon King attacked')
+        hp -= damage
+        input("Press 'enter'")
+        battle()
+    elif decision == 1:
+        print("The Demon King casted a thunderebolt")
+        thunderbolt = random.randint(300, 400)
+        hp -= thunderbolt
+        input("Press 'enter'")
+        battle()
+    if nhp <= 400:
+        print("The Demon King is draining")
+        nhp += 300
+        hp -= 300
+        input("Press 'enter'")
+        battle()
+
+
+battle()
